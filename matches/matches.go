@@ -2,7 +2,6 @@ package matches
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -25,7 +24,7 @@ type Match struct {
 type Matches []Match
 
 func DownloadMatches() Matches {
-	resp, err := http.Get("https://matchdownload.com/feed/json/fifa-world-cup-2022")
+	resp, err := http.Get("https://fixturedownload.com/feed/json/fifa-world-cup-2022")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -48,7 +47,7 @@ func DownloadMatches() Matches {
 // 1. match Methods – Formatters
 // match Team Matchup
 func (match Match) Who() (s string) {
-	var matchup string = match.HomeTeam + " - " + match.AwayTeam
+	var matchup string = match.HomeTeam + " vs " + match.AwayTeam
 	return matchup
 }
 
@@ -62,7 +61,8 @@ func (match Match) Result() (s string) {
 // TODO: match Time
 func (match Match) When() (s string) {
 	// TODO convert date nicer to view + add timezone
-	var time string = match.DateUtc[:10] + " at " + match.DateUtc[11:19] + " TODO timezone"
+	// TODO flip to month, day, year?
+	var time string = match.DateUtc[:10] + " at " + match.DateUtc[11:19]
 	return time
 }
 
@@ -94,20 +94,10 @@ func (match Match) Stage() (s string) {
 func (matches Matches) Today() Matches {
 	var gamesToday []Match
 	today := time.Now().Format("2006-01-02")
-	// zone, offset := time.Now().Zone()
-	// fmt.Println(zone, offset)
 	for _, match := range matches {
 		gameDate := match.DateUtc[:10]
-		// gameTime, _ := time.Parse("23:10:09", match.DateUtc[11:19])
-		// fmt.Println(gameTime.In(time.Local).Format("15:04:01"))
 		if gameDate == today {
-			// fmt.Println(gameTime)
 			gamesToday = append(gamesToday, match)
-			// fmt.Println(match.Who())
-			// fmt.Println(match.Result())
-			fmt.Println(match.When())
-			// fmt.Println(match.Where())
-			// fmt.Println(match.Stage())
 		}
 	}
 	return gamesToday
@@ -120,7 +110,6 @@ func (matches Matches) Tomorrow() Matches {
 		gameDate := match.DateUtc[:10]
 		if gameDate == tmrw {
 			gamesTmrw = append(gamesTmrw, match)
-			fmt.Println(match.Who()) // testing
 		}
 	}
 	return gamesTmrw
@@ -131,7 +120,6 @@ func (matches Matches) Country(c string) Matches {
 	for _, match := range matches {
 		if (c == match.HomeTeam) || (c == match.AwayTeam) {
 			gamesCountry = append(gamesCountry, match)
-			fmt.Println(match.Result()) // testing
 		}
 	}
 	return gamesCountry
