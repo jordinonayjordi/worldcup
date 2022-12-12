@@ -1,6 +1,6 @@
 # worldcup
 
-A CLI tool to stay updated on how the 2022 World Cup is progressing
+`worldcup` is CLI tool to stay updated on how the 2022 World Cup is progressing. The tool allows users to get updates on past fixtures and scores as well as follow the results and upcoming fixtures for their favorite countries.
 
 ## Installation
 
@@ -26,30 +26,41 @@ Options:
   
 
 #### Commands `fixtures`
-Get general information about upcoming and past fixtures, including stage of competition, teams playing, time and location
+Get general information about today and tomorrow's fixtures, including stage of competition, teams playing, time and location. You can also find out about your favorite team's past and upcoming games!
 
 ```
 Usage: worldcup fixtures [options]
 
 Options:
-  -h, --help      Show help                                             [boolean]
-  -t, --today     Get today’s fixtures                                  [boolean]
-  -w, --tomorrow  Get tomorrow’s fixtures                               [boolean]
-  -c, --country   Get fixtures for your selected country                [string]
+  -c, --country   get fixtures for a specific country                   [string]
+  -h, --help      help for fixtures                                     [boolean]
+  -t, --today     get today’s fixtures                                  [boolean]
+  -w, --tomorrow  get tomorrow’s fixtures                               [boolean]
 
 Examples:
+  worldcup fixtures -c USA
   worldcup fixtures -t
   worldcup fixtures -w
-  worldcup fixtures -c Spain
 ```
 
 #### Commands `scores`
-Get scores of past fixtures
+Get the results of past and today's games and find out how your favorite team's is doing!
 
+```
+Usage: worldcup scores [options]
 
+Options:
+  -c, --country   get scores for a specific country                   [string]
+  -h, --help      help for scores                                     [boolean]
+  -t, --today     get today’s scores                                  [boolean]
+
+Examples:
+  worldcup scores -c Spain
+  worldcup fixtures -t
+```
 
 ## Acknowledgements
-I would like to thank .....
+I would like to thank Hanbang Wang for his instruction and continued support throughout the CIS 193 course.
 
 ## License
 MIT © 2022 Jordi Nonay Jordi

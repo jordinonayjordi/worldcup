@@ -9,6 +9,17 @@ import (
 	"time"
 )
 
+var Countries = []string{
+	"Qatar", "Ecuador", "Sengal", "Netherlands",
+	"England", "Iran", "USA", "Wales",
+	"Argentina", "Saudi Arabia", "Mexico", "Poland",
+	"Denmark", "Tunisia", "France", "Australia",
+	"Croatia", "Belgium", "Canada", "Morocco",
+	"Japan", "Spain", "Costa Rica", "Germany",
+	"Ghana", "Uruguay", "Korea Republic", "Portugal",
+	"Serbia", "Brazil", "Cameroon", "Switzerland",
+}
+
 type Match struct {
 	MatchNumber   int    `json:"MatchNumber"`
 	RoundNumber   int    `json:"RoundNumber"`
@@ -44,7 +55,6 @@ func DownloadMatches() Matches {
 	return decoded
 }
 
-// 1. match Methods – Formatters
 // match Team Matchup
 func (match Match) Who() (s string) {
 	var matchup string = match.HomeTeam + " vs " + match.AwayTeam
@@ -60,9 +70,11 @@ func (match Match) Result() (s string) {
 
 // TODO: match Time
 func (match Match) When() (s string) {
-	// TODO convert date nicer to view + add timezone
-	// TODO flip to month, day, year?
-	var time string = match.DateUtc[:10] + " at " + match.DateUtc[11:19]
+	t, _ := time.Parse("2006-01-02 15:04:05Z", match.DateUtc)
+	loc, _ := time.LoadLocation("America/New_York")
+	// var time string = match.DateUtc[:10] + " at " + match.DateUtc[11:19]
+	t = (t.In(loc))
+	time := t.Month().String() + ", " + strconv.Itoa(t.Day()) + " at " + t.Format("15:04 EST")
 	return time
 }
 
@@ -90,7 +102,7 @@ func (match Match) Stage() (s string) {
 	return stage
 }
 
-// 2. matches Methods
+// getting today's matches
 func (matches Matches) Today() Matches {
 	var gamesToday []Match
 	today := time.Now().Format("2006-01-02")
@@ -103,6 +115,7 @@ func (matches Matches) Today() Matches {
 	return gamesToday
 }
 
+// getting tomorrow's matches
 func (matches Matches) Tomorrow() Matches {
 	var gamesTmrw []Match
 	tmrw := time.Now().Add(24 * time.Hour).Format("2006-01-02")
@@ -115,6 +128,7 @@ func (matches Matches) Tomorrow() Matches {
 	return gamesTmrw
 }
 
+// getting country's matches
 func (matches Matches) Country(c string) Matches {
 	var gamesCountry []Match
 	for _, match := range matches {
